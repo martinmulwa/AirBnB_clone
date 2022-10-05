@@ -7,6 +7,8 @@ The goal is to build the full web application: AirBnB Clone.
 
 ## 1. AirBnB Clone - The Console
 
+![Console flow](/images/console.png)
+
 This is the first step towards building the full web application: AirBnB Clone.
 
 In this first step we:
@@ -107,6 +109,8 @@ All the code is tested using python's **unittest** module.
 The tests are in the [tests](./tests/) folder.
 
 ## 2. AirBnB Clone - Web Static
+
+![Web Static flow](/images/webstatic.png)
 
 It is the second step towards building the full web application: AirBnB Clone.
 
