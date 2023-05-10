@@ -67,3 +67,8 @@ EOF  help  quit
 (hbnb)
 $
 ```
+
+## Authors
+
+- [**Martin Pius**](https://github.com/martinmulwa)
+- [**Alice Kiptui**](https://github.com/JEPTUI)
