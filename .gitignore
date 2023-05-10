@@ -1,0 +1,22 @@
+# Ignore all hidden files and directories
+.*
+
+# Except for the .gitignore file
+!.gitignore
+
+# Ignore .pyc files (compiled Python files)
+*.pyc
+
+# Ignore __pycache__ directories (created by Python 3)
+__pycache__/
+
+# Ignore .egg-info directories (created by setuptools)
+*.egg-info/
+
+# Ignore temporary files created by Vim
+.*.swp
+.*.swo
+.*.swn
+
+# Ignore backup files created by text editors
+*~
