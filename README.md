@@ -1,5 +1,7 @@
 # AirBnB Clone
 
+![hbnb image](/images/hbnb.png)
+
 ## Description
 
 This is a team project that is part of the ALX Software Engineering Program curriculum.
@@ -7,7 +9,7 @@ The goal is to build the full web application: AirBnB Clone.
 
 ## 1. AirBnB Clone - The Console
 
-![Console flow](/images/console.png)
+![Console flow image](/images/console.png)
 
 This is the first step towards building the full web application: AirBnB Clone.
 
