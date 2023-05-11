@@ -20,3 +20,6 @@ __pycache__/
 
 # Ignore backup files created by text editors
 *~
+
+# Ignore files used as example tests in the project tasks
+task_tests/*
