@@ -5,7 +5,7 @@
 ## Description
 
 This is a team project that is part of the ALX Software Engineering Program curriculum.
-The goal is to build the full web application: AirBnB Clone.
+The goal is to build a full web application: AirBnB Clone.
 
 ## 1. AirBnB Clone - The Console
 
@@ -68,7 +68,25 @@ EOF  help  quit
 $
 ```
 
-## Authors
+### Models
+
+The folder [models](./models/) contains all the data models used in this project defined as classes.
+
+| File                                    | Description                               |
+| --------------------------------------- | ----------------------------------------- |
+| [base_model.py](./models/base_model.py) | BaseModel class for all the other classes |
+
+### Tests
+
+We use the `unittest` module in Python to test the code. The tests are located in the [tests](./tests/) folder.
+
+To run the tests, navigate to the root of the project and run the following command:
+
+```bash
+python3 -m unittest discover tests
+```
+
+## Contributors
 
 - [**Martin Pius**](https://github.com/martinmulwa)
 - [**Alice Kiptui**](https://github.com/JEPTUI)
