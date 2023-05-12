@@ -67,9 +67,9 @@ class TestBaseModel(unittest.TestCase):
         }
 
         with self.assertRaises(TypeError):
-            bm3 = BaseModel(**model_json_invalid)
+            bm4 = BaseModel(**model_json_invalid)
 
-        # test __init__ with invalid kwargs
+        # test __init__ with missing kwargs arguments
         model_json_missing = {
             "created_at": "2017-09-28T21:03:54.052298",
             "__class__": "BaseModel",
@@ -79,7 +79,21 @@ class TestBaseModel(unittest.TestCase):
         }
 
         with self.assertRaises(TypeError):
-            bm3 = BaseModel(**model_json_missing)
+            bm5 = BaseModel(**model_json_missing)
+
+        # test __init__ with empty kwargs
+        model_json_empty = {}
+        bm6 = BaseModel(**model_json_empty)
+
+        # check that a BaseModel object has an id attribute which is a string
+        self.assertIsNotNone(bm6.id)
+        self.assertIs(type(bm6.id), str)
+
+        # check that created_at and updated_at attributes are datetime objects
+        self.assertIsNotNone(bm6.created_at)
+        self.assertIsNotNone(bm6.updated_at)
+        self.assertIsInstance(bm6.created_at, datetime)
+        self.assertIsInstance(bm6.updated_at, datetime)
 
     def test_str(self):
         """Test string representation of BaseModel objects."""
