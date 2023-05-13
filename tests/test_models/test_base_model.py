@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Test Base Model module."""
+"""Test BaseModel module."""
 
 from datetime import datetime
 from models.base_model import BaseModel
@@ -7,7 +7,7 @@ import unittest
 
 
 class TestBaseModel(unittest.TestCase):
-    """Test methods and attributes in BaseModel."""
+    """Test methods and attributes in BaseModel class."""
 
     def setUp(self):
         """Create BaseModel objects for testing."""
@@ -16,8 +16,6 @@ class TestBaseModel(unittest.TestCase):
 
     def test_init(self):
         """Test that BaseModel objects are initialized correctly."""
-        # create BaseModel objects for testing
-
         # check that a BaseModel object has an id attribute which is a string
         self.assertIsNotNone(self.bm1.id)
         self.assertIs(type(self.bm1.id), str)
