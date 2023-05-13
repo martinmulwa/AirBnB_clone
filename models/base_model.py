@@ -20,18 +20,18 @@ class BaseModel:
 
             for key in required_kwargs:
                 if key not in kwargs:
-                    raise TypeError(f"Missing Attribute Argument: {key}")
+                    raise TypeError(f"Error: Missing Attribute: {key}")
 
             # check if the given kwargs are invalid
             try:
                 self.created_at = datetime.fromisoformat(kwargs["created_at"])
             except ValueError:
-                raise TypeError("Invalid Attribute Argument: created_at")
+                raise TypeError("Error: Invalid Attribute: created_at")
 
             try:
                 self.updated_at = datetime.fromisoformat(kwargs["updated_at"])
             except ValueError:
-                raise TypeError("Invalid Attribute Argument: updated_at")
+                raise TypeError("Error: Invalid Attribute: updated_at")
 
             # create attributes for the BaseModel object using the kwargs
             for key, value in kwargs.items():
@@ -68,7 +68,7 @@ class BaseModel:
 
     def to_dict(self):
         """Return a dictionary containing attributes of BaseModel object."""
-        bm_dict = self.__dict__
+        bm_dict = dict(self.__dict__)
 
         class_name = self.__class__.__name__
         created_at = self.created_at.isoformat()
