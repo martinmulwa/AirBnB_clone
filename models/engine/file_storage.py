@@ -5,4 +5,5 @@
 class FileStorage:
     """Implements a simple file storage object."""
 
-    pass
+    __file_path = ""
+    __objects = {}
