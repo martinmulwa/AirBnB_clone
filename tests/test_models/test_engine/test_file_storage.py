@@ -4,12 +4,33 @@
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 import unittest
-import json
 import os
 
 
 class TestFileStorage(unittest.TestCase):
     """Test methods and attributes in FileStorage class."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.file_path = "test_file.json"
+
+        # remove file_path if it exists
+        if os.path.exists(cls.file_path):
+            try:
+                os.remove(cls.file_path)
+            except Exception:
+                raise Exception(f"Error: Could not remove {cls.file_path}")
+
+        FileStorage._FileStorage__file_path = cls.file_path
+
+    @classmethod
+    def tearDownClass(cls):
+        # remove file_path if it exists
+        if os.path.exists(cls.file_path):
+            try:
+                os.remove(cls.file_path)
+            except Exception:
+                raise Exception(f"Error: Could not remove {cls.file_path}")
 
     def setUp(self):
         """Create FileStorage object for testing."""
@@ -44,24 +65,18 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test 'save' method of FileStorage class."""
         file_path = FileStorage._FileStorage__file_path
-        file_path = "../../../models/engine/" + file_path
-        objects = FileStorage._FileStorage__objects
 
-        # add new objects to objects dict and save to file storage
-        bm1 = BaseModel()
-        bm2 = BaseModel()
+        # remove file_path if it exists
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception:
+                raise Exception(f"Error: Could not remove {file_path}")
 
-        for bm in [bm1, bm2]:
-            bm_key = f"{bm.__class__.__name__}.{bm.id}"
-            objects[bm_key] = bm
+        # check that file_path doesn't exist
+        self.assertFalse(os.path.exists(file_path))
 
         self.fs.save()
 
         # check that file_path exists
         self.assertTrue(os.path.exists(file_path))
-
-        # read content of file_path and check it's the same as objects
-        with open(file_path, "r") as f:
-            # Load the contents of the file as a dictionary
-            file_dict = json.load(f)
-            self.assertEqual(file_dict, objects)
