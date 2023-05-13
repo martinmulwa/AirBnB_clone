@@ -21,5 +21,4 @@ class TestFileStorage(unittest.TestCase):
     def test_all(self):
         """Test all method of FileStorage objects."""
         fs = FileStorage()
-
         self.assertIs(fs.all(), FileStorage._FileStorage__objects)
