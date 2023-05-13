@@ -17,3 +17,9 @@ class TestFileStorage(unittest.TestCase):
         # check that FileStorage has __objects private class attribute
         self.assertIsNotNone(FileStorage._FileStorage__objects)
         self.assertIsInstance(FileStorage._FileStorage__objects, dict)
+
+    def test_all(self):
+        """Test all method of FileStorage objects."""
+        fs = FileStorage()
+
+        self.assertIs(fs.all(), FileStorage._FileStorage__objects)
