@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-Module cmd
-Entry point of the command interpreter
+Contains the entry point of the command interpreter
 """
 import cmd
 
@@ -10,10 +9,11 @@ class HBNBCommand(cmd.Cmd):
     """
     Entry point of the command interpreter
     """
+    prompt = "(hbnb)"
 
     def do_quit(self, arg):
         """
-        Exit program
+        Exit program on quit command
         """
         return True
 
@@ -30,5 +30,5 @@ class HBNBCommand(cmd.Cmd):
         """
         pass
 
-    if __name__ == '__main__':
-        HBNBCommand().cmdloop()
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
