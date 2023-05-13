@@ -2,6 +2,7 @@
 """FileStorage module."""
 
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -35,4 +36,26 @@ class FileStorage:
             with open(self.__file_path, "w") as f_write:
                 json.dump(objects_serialized, f_write)
         except Exception:
-            raise Exception(f"Error: Could not open {self.__file_path}")
+            raise Exception(f"Error: Could not write to {self.__file_path}")
+
+    def reload(self):
+        """Deserializes JSON file to __objects."""
+        try:
+            # remove all objects currently in memory
+            self.__objects.clear()
+
+            # read content of file_path
+            try:
+                with open(self.__file_path, "r") as f_read:
+                    objects_loaded = json.load(f_read)
+            except Exception:
+                raise Exception(f"Error: Could not read {self.__file_path}")
+
+            # deserialize the objects in objects_loaded
+            for obj_key, obj_dict in objects_loaded.items():
+                class_name = globals()[obj_dict["__class__"]]
+                obj = class_name(**obj_dict)
+                self.__objects[obj_key] = obj
+
+        except FileNotFoundError:
+            pass
