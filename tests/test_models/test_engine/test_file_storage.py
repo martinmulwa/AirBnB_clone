@@ -80,3 +80,27 @@ class TestFileStorage(unittest.TestCase):
 
         # check that file_path exists
         self.assertTrue(os.path.exists(file_path))
+
+    def test_reload(self):
+        """Test 'reload' method of FileStorage class."""
+        objects = FileStorage._FileStorage__objects
+
+        # create some BaseModel objects and save them to storage
+        for i in range(1):
+            bm = BaseModel()
+            bm_key = f"{bm.__class__.__name__}.{bm.id}"
+            objects[bm_key] = bm
+
+        self.fs.save()
+
+        # remove all objects currently in memory
+        objects_copy = dict(objects)
+        objects.clear()
+        self.assertTrue(len(objects) == 0)
+
+        # reload objects from storage into memory
+        self.fs.reload()
+
+        # check that the reload is successful
+        for obj_key, obj in objects_copy.items():
+            self.assertEqual(obj.to_dict(), objects[obj_key].to_dict())
