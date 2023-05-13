@@ -23,3 +23,6 @@ __pycache__/
 
 # Ignore files used as example tests in the project tasks
 task_tests/*
+
+# Ignore json files used for storage
+*.json
