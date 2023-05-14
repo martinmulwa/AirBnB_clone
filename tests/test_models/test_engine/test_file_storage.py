@@ -11,6 +11,7 @@ class TestFileStorage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """Change storage file path for testing purposes."""
         cls.file_path = "test_file.json"
         cls.file_path_backup = FileStorage._FileStorage__file_path
 
@@ -25,6 +26,7 @@ class TestFileStorage(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """Change back storage file path."""
         # remove file_path if it exists
         if os.path.exists(cls.file_path):
             try:
