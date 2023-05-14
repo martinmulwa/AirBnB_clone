@@ -5,6 +5,7 @@ import unittest
 from models.base_model import BaseModel
 from models.user import User
 
+
 class TestUser(unittest.TestCase):
     """Tests methods and attributes in User class"""
 

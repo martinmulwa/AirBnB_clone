@@ -5,6 +5,7 @@ import unittest
 from models.base_model import BaseModel
 from models.city import City
 
+
 class TestCity(unittest.TestCase):
     """Tests methods and attributes in City class"""
 

@@ -5,6 +5,7 @@ import unittest
 from models.base_model import BaseModel
 from models.place import Place
 
+
 class TestPlace(unittest.TestCase):
     """Tests methods and attributes in Place class"""
 
