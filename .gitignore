@@ -26,3 +26,6 @@ task_tests/*
 
 # Ignore json files used for storage
 *.json
+
+# Ignore script used to generate AUTHORS file
+generate-authors.sh
