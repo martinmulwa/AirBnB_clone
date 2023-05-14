@@ -15,10 +15,12 @@ class FileStorage:
         """Return a valid class constructor given a valid class name."""
         from models.base_model import BaseModel
         from models.user import User
+        from models.state import State
 
         classes = {
             "BaseModel": BaseModel,
-            "User": User
+            "User": User,
+            "State": State
         }
 
         return classes.get(class_name)
