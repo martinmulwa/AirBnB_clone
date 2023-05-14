@@ -10,7 +10,8 @@ class HBNBCommand(cmd.Cmd):
     """
     Entry point of the command interpreter
     """
-    prompt = "(hbnb)"
+
+    prompt = "(hbnb) "
     classes = {}
 
     def do_quit(self, arg):
@@ -86,14 +87,14 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             objs = []
-            for obj in stroge.all().values():
+            for obj in storage.all().values():
                 if len(arg) > 0 and arg[0] == obj.__class__.__name__:
                     objs.append(obj.__str__())
-                elif len(args) == 0:
+                elif len(arg) == 0:
                     objs.append(obj.__str__())
             print(objs)
 
-    def do_update(self, args):
+    def do_update(self, arg):
         """
         Updates an instance based on the class name and id
         by adding or updating attribute
@@ -112,5 +113,5 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()
