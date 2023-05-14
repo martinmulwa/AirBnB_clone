@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """Test BaseModel module."""
 
+import os
+import unittest
 from datetime import datetime
 from models.base_model import BaseModel
-import unittest
+from models import storage
 
 
 class TestBaseModel(unittest.TestCase):
@@ -32,6 +34,20 @@ class TestBaseModel(unittest.TestCase):
         # check that created_at and updated_at attributes are equal
         self.assertIsNot(self.bm1.created_at, self.bm1.updated_at)
         self.assertEqual(self.bm1.created_at, self.bm1.updated_at)
+
+        # test __init__ with empty kwargs
+        model_json_empty = {}
+        bm6 = BaseModel(**model_json_empty)
+
+        # check that a BaseModel object has an id attribute which is a string
+        self.assertIsNotNone(bm6.id)
+        self.assertIs(type(bm6.id), str)
+
+        # check that created_at and updated_at attributes are datetime objects
+        self.assertIsNotNone(bm6.created_at)
+        self.assertIsNotNone(bm6.updated_at)
+        self.assertIsInstance(bm6.created_at, datetime)
+        self.assertIsInstance(bm6.updated_at, datetime)
 
         # test __init__ with valid kwargs
         model_json = {
@@ -79,22 +95,8 @@ class TestBaseModel(unittest.TestCase):
         with self.assertRaises(TypeError):
             bm5 = BaseModel(**model_json_missing)
 
-        # test __init__ with empty kwargs
-        model_json_empty = {}
-        bm6 = BaseModel(**model_json_empty)
-
-        # check that a BaseModel object has an id attribute which is a string
-        self.assertIsNotNone(bm6.id)
-        self.assertIs(type(bm6.id), str)
-
-        # check that created_at and updated_at attributes are datetime objects
-        self.assertIsNotNone(bm6.created_at)
-        self.assertIsNotNone(bm6.updated_at)
-        self.assertIsInstance(bm6.created_at, datetime)
-        self.assertIsInstance(bm6.updated_at, datetime)
-
     def test_str(self):
-        """Test string representation of BaseModel objects."""
+        """Test string representation of BaseModel."""
         bm1_str = (
             f"[{type(self.bm1).__name__}] "
             + f"({self.bm1.id}) "
@@ -104,12 +106,25 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(bm1_str, str(self.bm1))
 
     def test_save(self):
-        """Test save method of BaseModel objects."""
-        updated_before = self.bm2.updated_at
-        self.bm2.save()
-        updated_after = self.bm2.updated_at
+        """Test the save method of BaseModel."""
 
-        self.assertGreater(updated_after, updated_before)
+        file_path = storage._FileStorage__file_path
+        updated_at_before = self.bm2.updated_at
+
+        # remove the json file
+        try:
+            os.remove(file_path)
+        except Exception:
+            pass
+
+        self.assertFalse(os.path.exists(file_path))
+
+        # saving should create a new file and change updated_at
+        self.bm2.save()
+        updated_at_after = self.bm2.updated_at
+
+        self.assertTrue(os.path.exists(file_path))
+        self.assertGreater(updated_at_after, updated_at_before)
 
     def test_to_dict(self):
         """Test to_dict method of BaseModel objects."""
