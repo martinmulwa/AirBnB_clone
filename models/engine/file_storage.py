@@ -36,3 +36,15 @@ class FileStorage:
                 json.dump(objects_serialized, f_write)
         except Exception:
             raise Exception(f"Error: Could not open {self.__file_path}")
+
+    def reload(self):
+        """deserializes the JSON file to __objects"""
+        try:
+            with open(self.__file_path, "r") as f_write:
+                objects_serialized = json.load(f_write)
+                for o in objects_serialized.values():
+                    class_name = o["__class__"]
+                    del o["__class__"]
+                    self.new(eval(class_name)(**o))
+        except FileNotFoundError:
+            return
