@@ -59,7 +59,7 @@ class FileStorage:
                 with open(self.__file_path, "r") as f_read:
                     objects_loaded = json.load(f_read)
             except Exception:
-                raise Exception(f"Error: Could not read {self.__file_path}")
+                pass
 
             # deserialize the objects in objects_loaded
             for obj_key, obj_dict in objects_loaded.items():
