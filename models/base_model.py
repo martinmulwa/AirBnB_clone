@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """BaseModel module."""
 
-from datetime import datetime
 import uuid
+from datetime import datetime
+from models import storage
 
 
 class BaseModel:
@@ -56,6 +57,9 @@ class BaseModel:
                 now.microsecond,
             )
 
+            # store new object in memory
+            storage.new(self)
+
     def __str__(self):
         """Return unofficial string representation of a BaseModel object"""
         class_name = self.__class__.__name__
@@ -65,17 +69,14 @@ class BaseModel:
     def save(self):
         """Update updated_at with the current datetime."""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
-        """Return a dictionary containing attributes of BaseModel object."""
-        bm_dict = dict(self.__dict__)
+        """Return a JSON dict representation a of BaseModel object."""
+        json_dict = dict(self.__dict__)
 
-        class_name = self.__class__.__name__
-        created_at = self.created_at.isoformat()
-        updated_at = self.updated_at.isoformat()
+        json_dict["__class__"] = self.__class__.__name__
+        json_dict["created_at"] = self.created_at.isoformat()
+        json_dict["updated_at"] = self.updated_at.isoformat()
 
-        bm_dict["__class__"] = class_name
-        bm_dict["created_at"] = created_at
-        bm_dict["updated_at"] = updated_at
-
-        return bm_dict
+        return json_dict
