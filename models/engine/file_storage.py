@@ -18,13 +18,15 @@ class FileStorage:
         from models.state import State
         from models.city import City
         from models.amenity import Amenity
+        from models.place import Place
 
         classes = {
             "BaseModel": BaseModel,
             "User": User,
             "State": State,
             "City": City,
-            "Amenity": Amenity
+            "Amenity": Amenity,
+            "Place": Place
         }
 
         return classes.get(class_name)
