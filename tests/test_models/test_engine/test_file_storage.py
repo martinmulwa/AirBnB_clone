@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """Test FileStorage module."""
 
-from models.engine.file_storage import FileStorage
-from models.base_model import BaseModel
-import unittest
 import os
+import unittest
+from models.engine.file_storage import FileStorage
 
 
 class TestFileStorage(unittest.TestCase):
@@ -13,6 +12,7 @@ class TestFileStorage(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.file_path = "test_file.json"
+        cls.file_path_backup = FileStorage._FileStorage__file_path
 
         # remove file_path if it exists
         if os.path.exists(cls.file_path):
@@ -32,6 +32,8 @@ class TestFileStorage(unittest.TestCase):
             except Exception:
                 raise Exception(f"Error: Could not remove {cls.file_path}")
 
+        FileStorage._FileStorage__file_path = cls.file_path_backup
+
     def setUp(self):
         """Create FileStorage object for testing."""
         self.fs = FileStorage()
@@ -46,21 +48,32 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNotNone(FileStorage._FileStorage__objects)
         self.assertIsInstance(FileStorage._FileStorage__objects, dict)
 
+    def test_get_constructor(self):
+        """Test the 'get_constructor' method of FileStorage."""
+        from models.base_model import BaseModel
+
+        self.assertIs(self.fs.get_constructor("BaseModel"), BaseModel)
+        self.assertIsNone(self.fs.get_constructor("FakeModel"))
+
     def test_all(self):
         """Test 'all' method of FileStorage class."""
         self.assertIs(self.fs.all(), FileStorage._FileStorage__objects)
 
     def test_new(self):
-        """Test 'new' method of FileStorage class."""
-        # create new BaseModel object and check that it's not in __objects
+        """Test 'new' method of FileStorage."""
+        from models.base_model import BaseModel
+
+        objects = FileStorage._FileStorage__objects
+        objects_copy = dict(objects)
+
+        # create new object
         bm = BaseModel()
         bm_key = f"{bm.__class__.__name__}.{bm.id}"
-        self.assertTrue(bm_key not in FileStorage._FileStorage__objects)
 
-        # add the BaseModel object to __objects and check that it was added
-        self.fs.new(bm)
-        self.assertTrue(bm_key in FileStorage._FileStorage__objects)
-        self.assertIs(bm, FileStorage._FileStorage__objects[bm_key])
+        # check that the new object is now in __objects
+        self.assertTrue(bm_key not in objects_copy)
+        self.assertTrue(bm_key in objects)
+        self.assertEqual(objects.get(bm_key), bm)
 
     def test_save(self):
         """Test 'save' method of FileStorage class."""
@@ -76,6 +89,7 @@ class TestFileStorage(unittest.TestCase):
         # check that file_path doesn't exist
         self.assertFalse(os.path.exists(file_path))
 
+        # saving should create a new file
         self.fs.save()
 
         # check that file_path exists
@@ -83,22 +97,23 @@ class TestFileStorage(unittest.TestCase):
 
     def test_reload(self):
         """Test 'reload' method of FileStorage class."""
+        from models.base_model import BaseModel
+
         objects = FileStorage._FileStorage__objects
 
         # create some BaseModel objects and save them to storage
-        for i in range(1):
-            bm = BaseModel()
-            bm_key = f"{bm.__class__.__name__}.{bm.id}"
-            objects[bm_key] = bm
+        for i in range(2):
+            BaseModel()
 
         self.fs.save()
 
-        # remove all objects currently in memory
+        # clear the objects in memory
         objects_copy = dict(objects)
         objects.clear()
         self.assertTrue(len(objects) == 0)
+        self.assertTrue(len(objects_copy) > 0)
 
-        # reload objects from storage into memory
+        # reload objects from storage
         self.fs.reload()
 
         # check that the reload is successful
