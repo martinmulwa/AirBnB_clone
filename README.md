@@ -102,9 +102,6 @@ The folder [engine](./models/engine/) manages the serialization and deserializat
 A FileStorage class is defined in [file_storage.py](./models/engine/file_storage.py) with methods to follow this flow:
 `<object> -> to_dict() -> <dictionary> -> JSON dump -> <json string> -> FILE -> <json string> -> JSON load -> <dictionary> -> <object>`
 
-The [**init**.py](./models/__init__.py) file contains the instantiation of the FileStorage class called **storage**, followed by a call to the method reload() on that instance.
-This allows the storage to be reloaded automatically at initialization, which recovers the serialized data.
-
 ### Tests
 
 We use the `unittest` module in Python to test the code. The tests are located in the [tests](./tests/) folder.
