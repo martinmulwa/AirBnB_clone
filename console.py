@@ -10,6 +10,7 @@ from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 
 
 class HBNBCommand(cmd.Cmd):
@@ -23,7 +24,8 @@ class HBNBCommand(cmd.Cmd):
         "User": User,
         "State": State,
         "City": City,
-        "Amenity": Amenity
+        "Amenity": Amenity,
+        "Place": Place
     }
 
     def do_quit(self, args):
@@ -223,6 +225,7 @@ class HBNBCommand(cmd.Cmd):
 
         objects = storage.all()
         object = objects.get(object_key)
+        object_class = self.classes[class_name]
 
         # check if id is valid
         if object is None:
@@ -244,8 +247,14 @@ class HBNBCommand(cmd.Cmd):
         attribute_value = args_list[3]
 
         # if attribute exists in the object, cast it to the correct type
-        if hasattr(object, attribute_name):
-            attribute_value = type(attribute_name)(attribute_value)
+        if hasattr(object_class, attribute_name):
+
+            attribute_type = type(getattr(object_class, attribute_name))
+
+            try:
+                attribute_value = attribute_type(attribute_value)
+            except Exception:
+                raise Exception("Error: Casting failed")
 
         # set the value of attribute_name to attribute_value
         try:
