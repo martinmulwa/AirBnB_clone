@@ -4,6 +4,7 @@ Contains the entry point of the command interpreter
 """
 import cmd
 import shlex
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -29,6 +30,40 @@ class HBNBCommand(cmd.Cmd):
         "Place": Place,
         "Review": Review
     }
+
+    @staticmethod
+    def get_objects_list(class_name):
+        """Return list of all objects of given class_name."""
+
+        objects = storage.all()
+        objects_list = []
+
+        for object_key, object in objects.items():
+            object_name = object_key.split('.')[0]
+            if object_name == class_name:
+                objects_list.append(str(object))
+
+        return objects_list
+
+    def precmd(self, line):
+        """Parse user input before passing it to the respective method."""
+        pattern = r'^(\w+)\.(\w+)\((.*)\)$'
+        # Match the pattern against the string
+        match = re.match(pattern, line.strip())
+
+        if match:
+            class_name = match.group(1)
+            command = match.group(2)
+            arguments_str = match.group(3)
+            # Split the arguments string into a list of arguments
+            arguments = [
+                arg.strip().strip('"')
+                for arg in arguments_str.split(',')
+            ]
+
+            return " ".join([command, class_name, " ".join(arguments)])
+        else:
+            return line
 
     def do_quit(self, args):
         """Exit program on quit command
@@ -164,7 +199,7 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_all(self, args):
-        """Prints all string representation of all instances
+        """Prints string representation of all instances with given class
         """
 
         args_list = shlex.split(args)
@@ -190,13 +225,44 @@ class HBNBCommand(cmd.Cmd):
             print("** too many arguments provided **")
             return
 
-        for object_key, object in objects.items():
-            object_name = object_key.split('.')[0]
-            if object_name == class_name:
-                objects_str_list.append(str(object))
+        # get list of objects with given class name
+        objects_str_list = self.get_objects_list(class_name)
 
         # print list of string representations
         print(objects_str_list)
+
+    def do_count(self, args):
+        """Prints number of all instances with given class
+        """
+
+        args_list = shlex.split(args)
+        objects = storage.all()
+        objects_str_list = []
+
+        # if no arguments are provided
+        if len(args_list) == 0:
+            for object in objects.values():
+                objects_str_list.append(str(object))
+            print(len(objects_str_list))
+            return
+
+        # check if class name exists
+        class_name = args_list[0]
+
+        if class_name not in self.classes:
+            print("** class doesn't exist **")
+            return
+
+        # check if too many arguments are provided
+        if len(args_list) > 1:
+            print("** too many arguments provided **")
+            return
+
+        # get list of objects with given class name
+        objects_str_list = self.get_objects_list(class_name)
+
+        # print list of string representations
+        print(len(objects_str_list))
 
     def do_update(self, args):
         """Updates an instance based on the class name and id
